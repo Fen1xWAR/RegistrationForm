@@ -8,25 +8,21 @@
     <title>Form</title>
 </head>
 <body class="body">
-    <form action="" class="form">
+    <form action="Index.html" class="form">
        <div class="header">Форма</div><br>
        <div class="FormElement">
         <label for="login">Введите логин: </label>
-        <input type="text" class="Textfield" name="login" placeholder="Логин">
-        <br>
+        <input type="text" class="Textfield" name="login" placeholder="Логин" required><br>
         <label for="Mail">Введите ваш Email: </label>
-
-        <input type="text" class="Textfield" name="Mail" placeholder="Email"><br>
+        <input type="text" class="Textfield" name="Mail" placeholder="Email" required><br>
         <label for="Pass">Укажите пароль: </label>
-        <input type="password" class="Textfield" name="Pass"  placeholder="Пароль" id=""><br>
+        <input type="password" class="Textfield" name="Pass"  placeholder="Пароль" required id=""><br>
         <label for="Sex">Ваш пол: </label>
-        <input type="radio" class="radio" name="Sex" id="S1">М
-        <input type="radio" class="radio" name="Sex" id="S1">Ж
-    
-        
-    
-    <input type="submit" class="c-button">
+        <input type="radio" class="radio" name="Sex" id="S1"required>М
+        <input type="radio" class="radio" name="Sex" id="S1"required>Ж
+        <input type="submit" class="c-button">
 </div>
     </form>
+    <div class="alertbox">Успешный вход!</div>
 </body>
 </html>
