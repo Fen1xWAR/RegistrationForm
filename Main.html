@@ -4,15 +4,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="Style.css">
     <title>Form</title>
 </head>
-<body class="body">
-    <button class="c-button" onclick="ShowModal()">Жмав</button>
-    <div class="modalcontainer" id="modal">
+<body>
+    <button class="MainButtonViolet" id="EnterModal"  onclick="ShowModal()">Жмав</button>
+    <div class="ModalContainer" id="modal">
     <form action="Index.html" class="form" id="form">
-       <div class="header">Вход</div><br>
+
        <div class="FormElement">
+           <div class="CloseIcon" onclick="CloseModal()">❌</div>
+           <div class="header">Вход</div><br>
         <label for="login">Введите логин: </label>
         <input type="text" class="Textfield" name="login" placeholder="Логин" required><br>
         <label for="Mail">Введите ваш Email: </label>
@@ -20,33 +22,45 @@
         <label for="Pass">Укажите пароль: </label>
         <input type="password" class="Textfield" name="Pass"  placeholder="Пароль" required id=""><br>
         <label for="Sex">Ваш пол: </label>
-        <input type="radio" class="radio" name="Sex" id="S1"required>М
-        <input type="radio" class="radio" name="Sex" id="S1"required>Ж
+        <input type="radio" class="radio" name="Sex" required>М
+        <input type="radio" class="radio" name="Sex" required>Ж
         <br>    
-        <input type="submit" class="c-button" id="cbutton">
+        <div id="form-button">
+            <input type="submit" class="MainButtonViolet f-button" value="Войти" id="cbutton">
+        </div>
         </div>
     </form>
-        </div>
-    <div class="alertposition">
-    <div class="alertbox">Успешный вход!</div>
-    </div>
 </div>
-
 </body>
 <script>
 
     document.getElementById('form').onsubmit = function(e){ 
         e.preventDefault();
         e.stopPropagation();
-        document.getElementsByClassName("alertposition")[0].style.display = 'block';
-        
-        
+        AddNotification("Успешный вход!");
+
+
     }
+
     var modal = document.getElementById("modal");
     function ShowModal(){
         
         modal.classList.add("modalShown")
 
+    }
+    function CloseModal(){
+        modal.classList.remove("modalShown");
+    }
+    function AddNotification(NotificationText){
+        if (document.getElementsByClassName("AlertPosition").length == 0 ) {
+            let Notification = document.createElement("div");
+            let NotificationContainer = document.createElement("div");
+            NotificationContainer.classList.add("AlertPosition");
+            Notification.classList.add("AlertBox");
+            Notification.textContent = NotificationText;
+            document.getElementsByTagName("body")[0].appendChild(NotificationContainer);
+            document.getElementsByClassName("AlertPosition")[0].appendChild(Notification);
+        }
 
     }
 </script>
