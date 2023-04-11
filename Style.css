@@ -1,66 +1,74 @@
-body {
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css');
 
-  background-image: url("background.jpg");
-  background-size: 100%;
-  font-family: "Montserrat";
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-  height: 100vh;
-  margin: 0;
+body {
+    background-image: url("background.jpg");
+    background-size: 100%;
+    font-family: "Montserrat",cursive;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    height: 100vh;
+    margin: 0;
 }
-*{
-  box-sizing: border-box;
+
+* {
+    box-sizing: border-box;
 }
 
 .MainButtonViolet {
-  min-width: 100px;
-  border: 0;
-  border-radius: 5px;
-  background: rgb(157, 62, 162);
-  color: #fff;
-  font-size: 1.2rem ;
-  padding: 8px 16px;
-  cursor: pointer;
-  margin-top: 20px;
+    min-width: 100px;
+    border: 0;
+    border-radius: 5px;
+    background: rgb(157, 62, 162);
+    color: #fff;
+    font-size: 1.2rem;
+    padding: 8px 16px;
+    cursor: pointer;
+    margin: 10px;
 }
+
 .MainButtonViolet:hover {
-  background: rgb(124, 49, 128);;
+    background: rgb(124, 49, 128);;
 }
 
 .MainButtonViolet:focus {
-  outline: none;
-  box-shadow: 0 0 0 4px #cbd6ee;
+    outline: none;
+    box-shadow: 0 0 0 4px #cbd6ee;
 }
-.form{
+
+.form {
     padding: 20px;
     background: plum;
     border-radius: 10px;
     width: 60%;
     justify-content: center;
     align-items: center;
-  }
-#form-button{
-  text-align: center;
 }
-  .header{
+
+#form-button {
+    text-align: center;
+}
+
+.header {
     margin: 10px;
     font-size: 2rem;
     color: rgb(157, 62, 162);
     text-shadow: 1px 1px 1px #000;
     text-align: center;
     font-weight: bold;
-    
-  }
-  .FormElement{
+
+}
+
+.FormElement {
     line-height: 1.5;
     font-size: 1.5rem;
-    padding:   40px;
-    margin-top: -1rem ;
+    padding: 40px;
+    margin-top: -1rem;
     margin-bottom: 1rem;
-  }
-  .Textfield {
+}
+
+.textField {
     display: block;
     width: 100%;
     height: calc(2.25rem + 2px);
@@ -73,55 +81,75 @@ body {
     background-clip: padding-box;
     border: 1px solid #bdbdbd;
     border-radius: 0.25rem;
-  }
-  .radio {
+    flex-shrink: 1;
+}
+
+.radio {
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
     margin-left: 20px;
-    cursor: pointer ;
-  }
+    cursor: pointer;
+}
 
-  .AlertBox {
+.AlertBox {
     margin-bottom: 20px;
     padding: 10px;
     font-size: 1.5rem;
     text-align: center;
-    border:solid rgba(69, 19, 102, 0.837);
+    border: solid rgba(69, 19, 102, 0.837);
     border-radius: 1px;
     box-shadow: 12px 12px 2px 1px rgba(194, 131, 230, 0.843);
     background: plum;
     color: #000;
-  }
-  .AlertPosition{
+}
+
+.AlertPosition {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-  }
-  .AlertPosition:target{
+}
+
+.AlertPosition:target {
     display: block;
-  }
-  .ModalContainer{
+}
+
+.ModalContainer {
     position: absolute;
     height: 100%;
     width: 100%;
-    top:0;
+    top: 0;
     left: 0;
     display: flex;
     visibility: hidden;
-    scale: 0%;
+    scale: 0;
     transition: scale 1s linear, background-color 0.5s 1s;
     align-content: center;
     justify-content: center;
     align-items: center;
 
-  }
-  .modalShown{
+}
+
+.modalShown {
     scale: 100%;
     visibility: visible;
-    background-color: rgba(0,0,0,0.5);
-  }
-  .CloseIcon {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.CloseIcon {
     cursor: pointer;
-  }
+}
+
+.PasswordInput {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    text-align: end;
+}
+
+.eye {
+    position: absolute;
+    right: 1rem;
+    bottom: 0;
+}
