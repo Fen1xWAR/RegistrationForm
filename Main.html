@@ -5,54 +5,184 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <title>Form</title>
 </head>
 <body>
-    <button class="MainButtonViolet" id="EnterModal"  onclick="ShowModal()">Жмав</button>
-    <div class="ModalContainer" id="modal">
-    <form action="Index.html" class="form" id="form">
+<button class="MainButtonViolet" id="EnterModal" onclick="ShowModal('formreg')">Жмав для регистрации</button>
+<button class="MainButtonViolet" id="EnterModal" onclick="ShowModal('formsing')">Жмав для входа</button>
+<div class="ModalContainer" id="formreg">
+    <form action="Index.html" class="form" id="form1">
 
-       <div class="FormElement">
-           <div class="CloseIcon" onclick="CloseModal()">❌</div>
-           <div class="header">Вход</div><br>
-        <label for="login">Введите логин: </label>
-        <input type="text" class="Textfield" name="login" placeholder="Логин" required><br>
-        <label for="Mail">Введите ваш Email: </label>
-        <input type="text" class="Textfield" name="Mail" placeholder="Email" required><br>
-        <label for="Pass">Укажите пароль: </label>
-        <input type="password" class="Textfield" name="Pass"  placeholder="Пароль" required id=""><br>
-        <label for="Sex">Ваш пол: </label>
-        <input type="radio" class="radio" name="Sex" required>М
-        <input type="radio" class="radio" name="Sex" required>Ж
-        <br>    
-        <div id="form-button">
-            <input type="submit" class="MainButtonViolet f-button" value="Войти" id="cbutton">
+        <div class="FormElement">
+            <div class="CloseIcon" onclick="CloseModal('formreg')">❌</div>
+            <div class="header">Регистрация</div>
+            <br>
+            <label for="login">Введите логин: </label>
+            <input type="text" class="textField" name="login" id="loginReg" placeholder="Логин" value="" required><br>
+            <label for="Mail">Введите ваш Email: </label>
+            <input type="text" class="textField" name="Mail" id="mailReg" placeholder="Email" value="" required><br>
+            <label for="Pass">Укажите пароль: </label>
+            <input type="password" class="textField" name="Pass" id="passReg" placeholder="Пароль" value="" required><br>
+            <label for="Sex">Ваш пол: </label>
+            <input type="radio" class="radio" id="Sex0" name="Sex" required>М
+            <input type="radio" class="radio" id="Sex1" name="Sex" required>Ж
+            <br>
+            <div id="form-button">
+                <input type="submit" class="MainButtonViolet f-button" value="Зарегистрироваться" id="cbutton">
+            </div>
         </div>
+    </form>
+</div>
+<div class="ModalContainer" id="formsing">
+    <form action="Index.html" class="form" id="forms1">
+
+        <div class="FormElement">
+            <div class="CloseIcon" onclick="CloseModal('formsing')">❌</div>
+            <div class="header">Вход</div>
+            <br>
+            <label for="login">Ваш логин: </label>
+            <input type="text" class="textField" name="loginSing" placeholder="Логин" value="" id="loginSing" required><br>
+            <label for="Mail">Ваш Email: </label>
+            <input type="text" class="textField" name="MailSing" placeholder="Email" value="" id="mailSing" required><br>
+            <div class="InputContainer" id="Password">
+                <label for="Pass">Ваш пароль: </label>
+                <div class="PasswordInput">
+                    <input type="password" id="passSing" name="password" class="textField Toggleable"  placeholder="Пароль"
+                           value="" required>
+                    <i onclick="Toogle()" id="eye-slash" class="bi bi-eye-slash eye"></i>
+                </div>
+            </div>
+            <br>
+            <div id="form-button">
+                <input type="submit" class="MainButtonViolet f-button" value="Войти" id="cbutton1">
+            </div>
         </div>
     </form>
 </div>
 </body>
 <script>
 
-    document.getElementById('form').onsubmit = function(e){ 
+    function Toogle() {
+        let passArray = document.getElementsByName('Pass')
+        for (var i = 0; i < passArray.length; i++) {
+            let type = passArray[i].getAttribute('type') === 'password' ? 'text' : 'password';
+            passArray[i].setAttribute('type', type)
+            ToogleEyeIco(type);
+        }
+    }
+
+
+    // Event listeners
+
+    document.getElementById('formreg').onsubmit = function (e) {
         e.preventDefault();
         e.stopPropagation();
-        AddNotification("Успешный вход!");
+        AddNotification("Успешная регистрация!");
+        let sexID = document.getElementById("Sex0").checked ? 0 : 1;
+        SaveRegData(document.getElementById("loginReg").value, document.getElementById("mailReg").value, document.getElementById("passReg").value, sexID)
+
+
+    }
+    document.getElementById('formsing').onsubmit = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        RegDateCheckout(document.getElementById("loginSing").value, document.getElementById("mailSing").value,document.getElementById("passSing").value) ? (AddNotification("Успешный вход!"), setInterval(location.href = 'http://www.yandex.ru/', 1000)) : AddNotification("Данные неверны!")
+    }
+
+    function Toogle() {
+        let typeOfPassword = $("input[name='password']")
+        let eyeIco = $('.eye')
+        let value = typeOfPassword.attr('type')
+        if (value == 'password'){
+            typeOfPassword.attr('type','text')
+            eyeIco.toggleClass('bi-eye-slash bi-eye')
+        }
+        else{
+            typeOfPassword.attr('type','password')
+            eyeIco.toggleClass  ('bi-eye bi-eye-slash')
+        }
+
+        // if (flag == 1) {
+        //     document.getElementById('eye-slash').classList.replace('bi-eye-slash', 'bi-eye');
+        //     document.getElementById('pass').type = 'text'
+        // }
+        // else {
+        //     document.getElementById('eye-slash').classList.replace('bi-eye', 'bi-eye-slash');
+        //     document.getElementById('pass').type = 'password'
+        // }
 
 
     }
 
-    var modal = document.getElementById("modal");
-    function ShowModal(){
-        
+    function SaveRegData(login, mail, password, sex) {
+        localStorage.setItem('login', login)
+        localStorage.setItem('mail', mail)
+        localStorage.setItem('password', password)
+        localStorage.setItem('sex', sex)
+    }
+
+    function RegDateCheckout(login, mail, password) {
+        if (localStorage.getItem('login') == login) {
+            if (localStorage.getItem('mail') == mail) {
+                if (localStorage.getItem('password') == password) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    var jsonFileContent = '{"Users":[]}';
+    function saveJSON(jsonfile){
+        localStorage.setItem('users',jsonfile);
+    }
+    function SaveJSONReg(login,password){
+        if (localStorage.getItem('users') == undefined){
+            saveJSON(jsonFileContent)
+        }
+        let JsonFile = localStorage.getItem('users')
+        let JsonData = JSON.parse(JsonFile)
+        let key = login
+        // if (JsonData.Users[key] == undefined){
+            JsonData.Users[key] = [login,password]
+        // else {
+        //     console.log('1')
+        // }
+       jsonFile = JSON.stringify(JsonData)
+        saveJSON(jsonFile)
+    }
+
+    function AddToggleablePass() {
+        let eye = document.createElement(`i`)
+        eye.classList.add('bi')
+        eye.classList.add('bi-eye-slash')
+        eye.classList.add('eye')
+        let pass = document.getElementsByClassName('Toggleable')[0]
+        pass.parentNode.appendChild(eye)
+    }
+
+
+    function ShowModal(ModalID) {
+        let modal = document.getElementById(ModalID);
         modal.classList.add("modalShown")
 
     }
-    function CloseModal(){
+
+    function CloseModal(ModalID) {
+        let modal = document.getElementById(ModalID);
         modal.classList.remove("modalShown");
+        RemoveNotification();
+
     }
-    function AddNotification(NotificationText){
-        if (document.getElementsByClassName("AlertPosition").length == 0 ) {
+
+    function RemoveNotification() {
+        document.getElementsByClassName('AlertPosition')[0].removeChild(document.getElementsByClassName('AlertBox')[0])
+        document.getElementsByTagName("body")[0].removeChild(document.getElementsByClassName('AlertPosition')[0])
+
+    }
+
+    function AddNotification(NotificationText) {
+        if (document.getElementsByClassName("AlertPosition").length == 0) {
             let Notification = document.createElement("div");
             let NotificationContainer = document.createElement("div");
             NotificationContainer.classList.add("AlertPosition");
