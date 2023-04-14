@@ -9,8 +9,8 @@
     <title>Form</title>
 </head>
 <body>
-<button class="MainButtonViolet" id="EnterModal" onclick="ShowModal('formreg')">Жмав для регистрации</button>
-<button class="MainButtonViolet" id="EnterModal" onclick="ShowModal('formsing')">Жмав для входа</button>
+<button class="MainButtonViolet"  onclick="ShowModal('formreg')">Жмав для регистрации</button>
+<button class="MainButtonViolet"  onclick="ShowModal('formsing')">Жмав для входа</button>
 <div class="ModalContainer" id="formreg">
     <form action="Index.html" class="form" id="form1">
 
@@ -78,17 +78,26 @@
     document.getElementById('formreg').onsubmit = function (e) {
         e.preventDefault();
         e.stopPropagation();
-        AddNotification("Успешная регистрация!");
-        let sexID = document.getElementById("Sex0").checked ? 0 : 1;
-        SaveRegData(document.getElementById("loginReg").value, document.getElementById("mailReg").value, document.getElementById("passReg").value, sexID)
 
+        let login = document.getElementById("loginReg").value
+        let mail = document.getElementById("mailReg").value
+        let pass = document.getElementById("passReg").value
+        let sex = document.getElementById("Sex0").checked ? 0 : 1;
+       if ( SaveJSONReg(login,mail,pass,sex)) {
+           AddNotification("Успешная регистрация!");
+           setTimeout(CloseModal,1000,'formreg')
+       }
 
     }
     document.getElementById('formsing').onsubmit = function (e) {
         e.preventDefault();
         e.stopPropagation();
-        RegDateCheckout(document.getElementById("loginSing").value, document.getElementById("mailSing").value,document.getElementById("passSing").value) ? (AddNotification("Успешный вход!"), setInterval(location.href = 'http://www.yandex.ru/', 1000)) : AddNotification("Данные неверны!")
-    }
+        let login = document.getElementById("loginSing").value
+        let mail = document.getElementById("mailSing").value
+        let pass = document.getElementById("passSing").value
+        JSONRegDataCheackout(login,mail,pass) ? (AddNotification("Успешный вход!"), setInterval(location.href = 'http://www.yandex.ru/', 1000)) : AddNotification("Данные неверны!")
+    //     JSONRegDataCheackout(document.getElementById("loginSing").value, document.getElementById("mailSing").value,document.getElementById("passSing").value) ? (AddNotification("Успешный вход!"), setInterval(location.href = 'http://www.yandex.ru/', 1000)) : AddNotification("Данные неверны!")
+     }
 
     function Toogle() {
         let typeOfPassword = $("input[name='password']")
@@ -103,53 +112,69 @@
             eyeIco.toggleClass  ('bi-eye bi-eye-slash')
         }
 
-        // if (flag == 1) {
-        //     document.getElementById('eye-slash').classList.replace('bi-eye-slash', 'bi-eye');
-        //     document.getElementById('pass').type = 'text'
-        // }
-        // else {
-        //     document.getElementById('eye-slash').classList.replace('bi-eye', 'bi-eye-slash');
-        //     document.getElementById('pass').type = 'password'
-        // }
+
 
 
     }
 
-    function SaveRegData(login, mail, password, sex) {
-        localStorage.setItem('login', login)
-        localStorage.setItem('mail', mail)
-        localStorage.setItem('password', password)
-        localStorage.setItem('sex', sex)
-    }
-
-    function RegDateCheckout(login, mail, password) {
-        if (localStorage.getItem('login') == login) {
-            if (localStorage.getItem('mail') == mail) {
-                if (localStorage.getItem('password') == password) {
-                    return true
+    // function SaveRegData(login, mail, password, sex) {
+    //     localStorage.setItem('login', login)
+    //     localStorage.setItem('mail', mail)
+    //     localStorage.setItem('password', password)
+    //     localStorage.setItem('sex', sex)
+    // }
+    function  JSONRegDataCheackout(login,mail,password){
+            let JsonFile = localStorage.getItem('users')
+            let JsonData = JSON.parse(JsonFile)
+            let key = login
+            if (JsonData.Users[key] == undefined){
+                AddNotification('Данного пользователя не существует!')
+                return false
+            }
+            else{
+                RemoveNotification()
+                let currentUser   =  JsonData.Users[key]
+                if(currentUser.login == login && currentUser.password == password && currentUser.mail == mail){
+                return true
+                    }
+                else{
+                    return false
                 }
             }
-        }
-        return false
     }
-    var jsonFileContent = '{"Users":[]}';
+    // function RegDateCheckout(login, mail, password) {
+    //     if (localStorage.getItem('login') == login) {
+    //         if (localStorage.getItem('mail') == mail) {
+    //             if (localStorage.getItem('password') == password) {
+    //                 return true
+    //             }
+    //         }
+    //     }
+    //     return false
+    // }
+    var jsonFileContent = '{"Users":{}}';
     function saveJSON(jsonfile){
         localStorage.setItem('users',jsonfile);
     }
-    function SaveJSONReg(login,password){
+    function SaveJSONReg(login,password,mail,sex){
         if (localStorage.getItem('users') == undefined){
             saveJSON(jsonFileContent)
         }
         let JsonFile = localStorage.getItem('users')
         let JsonData = JSON.parse(JsonFile)
         let key = login
-        // if (JsonData.Users[key] == undefined){
-            JsonData.Users[key] = [login,password]
-        // else {
-        //     console.log('1')
-        // }
-       jsonFile = JSON.stringify(JsonData)
-        saveJSON(jsonFile)
+
+        if (JsonData.Users[key] == undefined){
+            JsonData.Users[key] = {'login':login,'password':password,'mail':mail,'sex':sex}
+            RemoveNotification()
+            JsonFile = JSON.stringify(JsonData)
+            saveJSON(JsonFile)
+            return true
+            }
+        else{
+            AddNotification('Такой пользователь уже существует!')
+        }
+
     }
 
     function AddToggleablePass() {
@@ -171,14 +196,14 @@
     function CloseModal(ModalID) {
         let modal = document.getElementById(ModalID);
         modal.classList.remove("modalShown");
-        RemoveNotification();
-
+        setTimeout(RemoveNotification(),1000)
     }
 
     function RemoveNotification() {
-        document.getElementsByClassName('AlertPosition')[0].removeChild(document.getElementsByClassName('AlertBox')[0])
-        document.getElementsByTagName("body")[0].removeChild(document.getElementsByClassName('AlertPosition')[0])
-
+        if ((document.getElementsByClassName('AlertPosition')[0])) {
+            document.getElementsByClassName('AlertPosition')[0].removeChild(document.getElementsByClassName('AlertBox')[0])
+            document.getElementsByTagName("body")[0].removeChild(document.getElementsByClassName('AlertPosition')[0])
+        }
     }
 
     function AddNotification(NotificationText) {
