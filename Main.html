@@ -82,11 +82,19 @@
         let login = document.getElementById("loginReg").value
         let mail = document.getElementById("mailReg").value
         let pass = document.getElementById("passReg").value
-        let sex = document.getElementById("Sex0").checked ? 0 : 1;
-       if ( SaveJSONReg(login,mail,pass,sex)) {
-           AddNotification("Успешная регистрация!");
-           setTimeout(CloseModal,1000,'formreg')
-       }
+        let sex = document.getElementById("Sex0").checked
+    if (validateEmail(mail)){
+        if ( SaveJSONReg(login,pass,mail,sex)) {
+            AddNotification("Успешная регистрация!");
+            setTimeout(CloseModal,1000,'formreg')
+        }
+        else{
+            AddNotification('Такой пользователь уже существует!')
+        }
+    }
+    else{
+        AddNotification('Неверный формат почты!')
+    }
 
     }
     document.getElementById('formsing').onsubmit = function (e) {
@@ -98,7 +106,10 @@
         JSONRegDataCheackout(login,mail,pass) ? (AddNotification("Успешный вход!"), setInterval(location.href = 'http://www.yandex.ru/', 1000)) : AddNotification("Данные неверны!")
     //     JSONRegDataCheackout(document.getElementById("loginSing").value, document.getElementById("mailSing").value,document.getElementById("passSing").value) ? (AddNotification("Успешный вход!"), setInterval(location.href = 'http://www.yandex.ru/', 1000)) : AddNotification("Данные неверны!")
      }
-
+    function validateEmail(email) {
+        var re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+        return re.test(String(email).toLowerCase());
+    }
     function Toogle() {
         let typeOfPassword = $("input[name='password']")
         let eyeIco = $('.eye')
@@ -172,7 +183,8 @@
             return true
             }
         else{
-            AddNotification('Такой пользователь уже существует!')
+            return false
+
         }
 
     }
@@ -216,7 +228,9 @@
             document.getElementsByTagName("body")[0].appendChild(NotificationContainer);
             document.getElementsByClassName("AlertPosition")[0].appendChild(Notification);
         }
-
+        else{
+            RemoveNotification()
+        }
     }
 </script>
 </html>
