@@ -30,10 +30,10 @@ document.getElementById('formsing').onsubmit = function (e) {
     JSONRegDataCheackout(login,mail,pass) ? (AddNotification("Успешный вход!"), setInterval(location.href = 'http://www.yandex.ru/', 1000)) : AddNotification("Логин или пароль неверны!")
 }
 function validateEmail(email) {
-    var re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-    return re.test(String(email).toLowerCase());
+    const mailSample = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+    return mailSample.test(String(email).toLowerCase());
 }
-function Toogle() {
+function TooglePassword() {
     let typeOfPassword = $("input[name='password']")
     let eyeIco = $('.eye')
     let value = typeOfPassword.attr('type')
