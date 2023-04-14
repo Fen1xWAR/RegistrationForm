@@ -103,8 +103,7 @@
         let login = document.getElementById("loginSing").value
         let mail = document.getElementById("mailSing").value
         let pass = document.getElementById("passSing").value
-        JSONRegDataCheackout(login,mail,pass) ? (AddNotification("Успешный вход!"), setInterval(location.href = 'http://www.yandex.ru/', 1000)) : AddNotification("Данные неверны!")
-    //     JSONRegDataCheackout(document.getElementById("loginSing").value, document.getElementById("mailSing").value,document.getElementById("passSing").value) ? (AddNotification("Успешный вход!"), setInterval(location.href = 'http://www.yandex.ru/', 1000)) : AddNotification("Данные неверны!")
+        JSONRegDataCheackout(login,mail,pass) ? (AddNotification("Успешный вход!"), setInterval(location.href = 'http://www.yandex.ru/', 1000)) : AddNotification("Логин или пароль неверны!")
      }
     function validateEmail(email) {
         var re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
@@ -176,7 +175,7 @@
         let key = login
 
         if (JsonData.Users[key] == undefined){
-            JsonData.Users[key] = {'login':login,'password':password,'mail':mail,'sex':sex}
+            JsonData.Users[key] = {'login':login,'password':password,'mail':mail,'male':sex}
             RemoveNotification()
             JsonFile = JSON.stringify(JsonData)
             saveJSON(JsonFile)
