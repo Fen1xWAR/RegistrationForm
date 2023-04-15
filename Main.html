@@ -88,7 +88,7 @@
     }
 
     }
-    document.getElementById('forms1').onsubmit = function (e) {
+    document.getElementById('formsing').onsubmit = function (e) {
         e.preventDefault();
         e.stopPropagation();
         let login = document.getElementById("loginSing").value
@@ -98,12 +98,12 @@
             (AddNotification("Успешный вход!"), setInterval(location.href = 'http://www.yandex.ru/', 1000))
         }
         else{
-              AddNotification("Логин или пароль неверны!")
+
         }
 
      }
     function validateEmail(email) {
-        var re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+            var re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
         return re.test(String(email).toLowerCase());
     }
     function Toogle() {
@@ -122,6 +122,9 @@
     }
 
     function  JSONRegDataCheckout(login,mail,password){
+            if (localStorage.getItem('users') == undefined){
+                saveJSON(jsonFileContent)
+            }
             let JsonFile = localStorage.getItem('users')
             let JsonData = JSON.parse(JsonFile)
             let key = login
@@ -136,6 +139,7 @@
                 return true
                     }
                 else{
+                    AddNotification("Логин или пароль неверны!")
                     return false
                 }
             }
