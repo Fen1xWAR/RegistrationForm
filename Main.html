@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="Style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <title>Form</title>
+    <script src="script.js"></script>
 </head>
 <body>
 <button class="MainButtonViolet"  onclick="ShowModal('formreg')">Жмав для регистрации</button>
@@ -23,7 +24,14 @@
             <label for="Mail">Введите ваш Email: </label>
             <input type="text" class="textField" name="Mail" id="mailReg" placeholder="Email" value="" required><br>
             <label for="Pass">Укажите пароль: </label>
-            <input type="password" class="textField" name="Pass" id="passReg" placeholder="Пароль" value="" required><br>
+            <div class="PasswordInput">
+                <input type="password" id="passReg" name="password" class="textField Toggleable"  placeholder="Пароль"
+                       value="" required>
+                <i onclick="togglePass()" id="eye-slash" class="bi bi-eye-slash eye"></i>
+            </div>
+            <br>
+            <label for="Pass">Повторите пароль: </label>
+            <input type="text" class="textField" name="Pass" id="passRegConfirm" placeholder="Пароль" value="" required><br>
             <label for="Sex">Ваш пол: </label>
             <input type="radio" class="radio" id="Sex0" name="Sex" required>М
             <input type="radio" class="radio" id="Sex1" name="Sex" required>Ж
@@ -50,7 +58,7 @@
                 <div class="PasswordInput">
                     <input type="password" id="passSing" name="password" class="textField Toggleable"  placeholder="Пароль"
                            value="" required>
-                    <i onclick="Toogle()" id="eye-slash" class="bi bi-eye-slash eye"></i>
+                    <i onclick="togglePass()" id="eye-slash" class="bi bi-eye-slash eye"></i>
                 </div>
             </div>
             <br>
@@ -62,10 +70,6 @@
 </div>
 </body>
 <script>
-
-
-
-
     document.getElementById('formreg').onsubmit = function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -73,20 +77,26 @@
         let login = document.getElementById("loginReg").value
         let mail = document.getElementById("mailReg").value
         let pass = document.getElementById("passReg").value
+        let passToConfirm = document.getElementById("passRegConfirm").value
         let sex = document.getElementById("Sex0").checked
-    if (validateEmail(mail)){
-        if ( SaveJSONReg(login,pass,mail,sex)) {
-            AddNotification("Успешная регистрация!");
-            setTimeout(CloseModal,1000,'formreg')
+        if (pass == passToConfirm) {
+
+
+            if (validateEmail(mail)) {
+                if (SaveJSONReg(login, pass, mail, sex)) {
+                    AddNotification("Успешная регистрация!");
+                    setTimeout(CloseModal, 1000, 'formreg')
+                } else {
+                    AddNotification('Такой пользователь уже существует!')
+                }
+            } else {
+                AddNotification('Неверный формат почты!')
+            }
+
         }
         else{
-            AddNotification('Такой пользователь уже существует!')
+            AddNotification('Пароли не совпадают!')
         }
-    }
-    else{
-        AddNotification('Неверный формат почты!')
-    }
-
     }
     document.getElementById('formsing').onsubmit = function (e) {
         e.preventDefault();
@@ -94,123 +104,18 @@
         let login = document.getElementById("loginSing").value
         let mail = document.getElementById("mailSing").value
         let pass = document.getElementById("passSing").value
-        if (JSONRegDataCheckout(login,mail,pass)){
-            (AddNotification("Успешный вход!"), setInterval(location.href = 'http://www.yandex.ru/', 1000))
-        }
-        else{
+        if (validateEmail(mail)) {
 
-        }
 
-     }
-    function validateEmail(email) {
-            var re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-        return re.test(String(email).toLowerCase());
-    }
-    function Toogle() {
-        let typeOfPassword = $("input[name='password']")
-        let eyeIco = $('.eye')
-        let value = typeOfPassword.attr('type')
-        if (value == 'password'){
-            typeOfPassword.attr('type','text')
-            eyeIco.toggleClass('bi-eye-slash bi-eye')
-        }
-        else{
-            typeOfPassword.attr('type','password')
-            eyeIco.toggleClass  ('bi-eye bi-eye-slash')
-        }
+            if (JSONRegDataCheckout(login, mail, pass)) {
+                (AddNotification("Успешный вход!"), setInterval(location.href = 'http://www.yandex.ru/', 1000))
+            } else {
 
-    }
-
-    function  JSONRegDataCheckout(login,mail,password){
-            if (localStorage.getItem('users') == undefined){
-                saveJSON(jsonFileContent)
             }
-            let JsonFile = localStorage.getItem('users')
-            let JsonData = JSON.parse(JsonFile)
-            let key = login
-            if (JsonData.Users[key] == undefined){
-                AddNotification('Данного пользователя не существует!')
-                return false
-            }
-            else{
-                RemoveNotification()
-                let currentUser   =  JsonData.Users[key]
-                if(currentUser.login == login && currentUser.password == password && currentUser.mail == mail){
-                return true
-                    }
-                else{
-                    AddNotification("Логин или пароль неверны!")
-                    return false
-                }
-            }
-    }
-    var jsonFileContent = '{"Users":{}}';
-    function saveJSON(jsonfile){
-        localStorage.setItem('users',jsonfile);
-    }
-    function SaveJSONReg(login,password,mail,sex){
-        if (localStorage.getItem('users') == undefined){
-            saveJSON(jsonFileContent)
         }
-        let JsonFile = localStorage.getItem('users')
-        let JsonData = JSON.parse(JsonFile)
-        let key = login
-
-        if (JsonData.Users[key] == undefined){
-            JsonData.Users[key] = {'login':login,'password':password,'mail':mail,'male':sex}
-            RemoveNotification()
-            JsonFile = JSON.stringify(JsonData)
-            saveJSON(JsonFile)
-            return true
-            }
-        else{
-            return false
-
-        }
-
-    }
-
-    function AddToggleablePass() {
-        let eye = document.createElement(`i`)
-        eye.classList.add('bi')
-        eye.classList.add('bi-eye-slash')
-        eye.classList.add('eye')
-        let pass = document.getElementsByClassName('Toggleable')[0]
-        pass.parentNode.appendChild(eye)
-    }
-
-
-    function ShowModal(ModalID) {
-        let modal = document.getElementById(ModalID);
-        modal.classList.add("modalShown")
-
-    }
-
-    function CloseModal(ModalID) {
-        let modal = document.getElementById(ModalID);
-        modal.classList.remove("modalShown");
-        setTimeout(RemoveNotification(),1000)
-    }
-
-    function RemoveNotification() {
-        if ((document.getElementsByClassName('AlertPosition')[0])) {
-            document.getElementsByClassName('AlertPosition')[0].removeChild(document.getElementsByClassName('AlertBox')[0])
-            document.getElementsByTagName("body")[0].removeChild(document.getElementsByClassName('AlertPosition')[0])
+        else {
+            AddNotification('Неверный формат почты')
         }
     }
-
-    function AddNotification(NotificationText) {
-        if (!(document.getElementsByClassName("AlertPosition").length == 0)) {
-            RemoveNotification()
-        }
-        let Notification = document.createElement("div");
-        let NotificationContainer = document.createElement("div");
-        NotificationContainer.classList.add("AlertPosition");
-        Notification.classList.add("AlertBox");
-        Notification.textContent = NotificationText;
-        document.getElementsByTagName("body")[0].appendChild(NotificationContainer);
-        document.getElementsByClassName("AlertPosition")[0].appendChild(Notification);
-    }
-
 </script>
 </html>
