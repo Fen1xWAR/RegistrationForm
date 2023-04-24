@@ -1,66 +1,108 @@
+function $(stringSelector) {
+    return {
+        mainObject: document.querySelector(stringSelector),
+        html: function (string) {
+            if (string === undefined) {
+                return this.mainObject.innerHTML;
+            } else {
+                this.mainObject.innerHTML = string;
+                return this;
+            }
+        },
+        hide: function (){
 
+                this.mainObject.style.display = 'none'
+                return this
+        },
+        show: function (){
+            let style = window.getComputedStyle(this.mainObject)
+            let display = style.getPropertyValue('display')
+            if (display === undefined ) {
+                this.mainObject.style.display = ''
+            }
+            else{
+               this.mainObject.style.setProperty('display','block')
+
+            }
+            return this
+        },
+        isShown: function (){
+            return (this.mainObject.style.display !=='none') &&
+                (getComputedStyle(this.mainObject).getPropertyValue('display')!=='none') &&
+                (this.mainObject.style.visibility !=='hidden') &&
+                (getComputedStyle(this.mainObject).getPropertyValue('visibility')!=='hidden')
+        },
+        isHidden: function (){
+            return !this.isShown()
+        }
+    }
+}
+
+// $('.MainButtonViolet').hide()
+function ShowHidden(elems){
+}
 function validateEmail(email) {
     let re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
     return re.test(String(email).toLowerCase());
 }
+
 function togglePass() {
     let typeOfPassword = $("input[name='password']")
     let eyeIco = $('.eye')
     let value = typeOfPassword.attr('type')
-    if (value === 'password'){
-        typeOfPassword.attr('type','text')
+    if (value === 'password') {
+        typeOfPassword.attr('type', 'text')
         eyeIco.toggleClass('bi-eye-slash bi-eye')
-    }
-    else{
-        typeOfPassword.attr('type','password')
-        eyeIco.toggleClass  ('bi-eye bi-eye-slash')
+    } else {
+        typeOfPassword.attr('type', 'password')
+        eyeIco.toggleClass('bi-eye bi-eye-slash')
     }
 
 }
 
-function  JSONRegDataCheckout(login,mail,password){
-    if (localStorage.getItem('users') === undefined){
+function JSONRegDataCheckout(login, mail, password) {
+    if (localStorage.getItem('users') === undefined) {
         saveJSON(jsonFileContent)
     }
     let JsonFile = localStorage.getItem('users')
     let JsonData = JSON.parse(JsonFile)
     let key = login
-    if (JsonData.Users[key] === undefined){
+    if (JsonData.Users[key] === undefined) {
         AddNotification('Данного пользователя не существует!')
         return false
-    }
-    else{
+    } else {
         RemoveNotification()
-        let currentUser   =  JsonData.Users[key]
-        if(currentUser.login === login && currentUser.password === password && currentUser.mail === mail){
+        let currentUser = JsonData.Users[key]
+        if (currentUser.login === login && currentUser.password === password && currentUser.mail === mail) {
             return true
-        }
-        else{
+        } else {
             AddNotification("Логин или пароль неверны!")
             return false
         }
     }
 }
+
 const jsonFileContent = '{"Users":{}}';
-function saveJSON(jsonfile){
-    localStorage.setItem('users',jsonfile);
+
+function saveJSON(jsonfile) {
+    localStorage.setItem('users', jsonfile);
 }
-function SaveJSONReg(login,password,mail,sex){
-    if (localStorage.getItem('users') === undefined){
+
+function SaveJSONReg(login, password, mail, sex) {
+    if (localStorage.getItem('users') === undefined) {
         saveJSON(jsonFileContent)
     }
     let JsonFile = localStorage.getItem('users')
     let JsonData = JSON.parse(JsonFile)
     let key = login
 
-    if (JsonData.Users[key] === undefined){
-        JsonData.Users[key] = {'login':login,'password':password,'mail':mail,'male':sex}
+    if (JsonData.Users[key] === undefined) {
+        JsonData.Users[key] = {'login': login, 'password': password, 'mail': mail, 'male': sex}
         RemoveNotification()
         JsonFile = JSON.stringify(JsonData)
         saveJSON(JsonFile)
         return true
-    }
-    else{
+    } else {
         return false
 
     }
@@ -87,7 +129,7 @@ function ShowModal(ModalID) {
 function CloseModal(ModalID) {
     let modal = document.getElementById(ModalID);
     modal.classList.remove("modalShown");
-    setTimeout(RemoveNotification(),1000)
+    setTimeout(RemoveNotification, 1000)
 }
 
 function RemoveNotification() {

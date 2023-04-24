@@ -1,8 +1,10 @@
 @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css');
+
 * {
     box-sizing: border-box;
     overflow: hidden;
 }
+
 body {
     background-repeat: no-repeat;
     background-position: center center;
@@ -12,7 +14,7 @@ body {
     -o-background-size: cover;
     background-size: cover;
     background-image: url("background.jpg");
-    font-family: "Montserrat",cursive;
+    font-family: "Montserrat", cursive;
     display: flex;
     justify-content: center;
     align-items: center;

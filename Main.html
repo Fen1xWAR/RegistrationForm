@@ -5,13 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <title>Form</title>
     <script src="script.js"></script>
+<!--    <script src="jquery-3.6.4.js"></script>-->
 </head>
 <body>
-<button class="MainButtonViolet"  onclick="ShowModal('formreg')">Жмав для регистрации</button>
-<button class="MainButtonViolet"  onclick="ShowModal('formsing')">Жмав для входа</button>
+<button class="MainButtonViolet" onclick="ShowModal('formreg')">Жмав для регистрации</button>
+<button class="MainButtonViolet" onclick="ShowModal('formsing')">Жмав для входа</button>
 <div class="ModalContainer" id="formreg">
     <form action="Index.html" class="form" id="form1">
 
@@ -19,20 +19,20 @@
             <div class="CloseIcon" onclick="CloseModal('formreg')">❌</div>
             <div class="header">Регистрация</div>
             <br>
-            <label for="login">Введите логин: </label>
+            <label for="loginReg">Введите логин: </label>
             <input type="text" class="textField" name="login" id="loginReg" placeholder="Логин" value="" required><br>
-            <label for="Mail">Введите ваш Email: </label>
+            <label for="MailReg">Введите ваш Email: </label>
             <input type="text" class="textField" name="Mail" id="mailReg" placeholder="Email" value="" required><br>
-            <label for="Pass">Укажите пароль: </label>
+            <label for="PassReg">Укажите пароль: </label>
             <div class="PasswordInput">
-                <input type="password" id="passReg" name="password" class="textField Toggleable"  placeholder="Пароль"
+                <input type="password" id="passReg" name="password" class="textField Toggleable" placeholder="Пароль"
                        value="" required>
                 <i onclick="togglePass()" id="eye-slash" class="bi bi-eye-slash eye"></i>
             </div>
             <br>
-            <label for="Pass">Повторите пароль: </label>
+            <label for="passRegConfirm">Повторите пароль: </label>
             <input type="text" class="textField" name="Pass" id="passRegConfirm" placeholder="Пароль" value="" required><br>
-            <label for="Sex">Ваш пол: </label>
+            <label for="SexSign">Ваш пол: </label>
             <input type="radio" class="radio" id="Sex0" name="Sex" required>М
             <input type="radio" class="radio" id="Sex1" name="Sex" required>Ж
             <br>
@@ -50,13 +50,16 @@
             <div class="header">Вход</div>
             <br>
             <label for="login">Ваш логин: </label>
-            <input type="text" class="textField" name="loginSing" placeholder="Логин" value="" id="loginSing" required><br>
+            <input type="text" class="textField" name="loginSing" placeholder="Логин" value="" id="loginSing"
+                   required><br>
             <label for="Mail">Ваш Email: </label>
-            <input type="text" class="textField" name="MailSing" placeholder="Email" value="" id="mailSing" required><br>
+            <input type="text" class="textField" name="MailSing" placeholder="Email" value="" id="mailSing"
+                   required><br>
             <div class="InputContainer" id="Password">
                 <label for="Pass">Ваш пароль: </label>
                 <div class="PasswordInput">
-                    <input type="password" id="passSing" name="password" class="textField Toggleable"  placeholder="Пароль"
+                    <input type="password" id="passSing" name="password" class="textField Toggleable"
+                           placeholder="Пароль"
                            value="" required>
                     <i onclick="togglePass()" id="eye-slash" class="bi bi-eye-slash eye"></i>
                 </div>
@@ -93,8 +96,7 @@
                 AddNotification('Неверный формат почты!')
             }
 
-        }
-        else{
+        } else {
             AddNotification('Пароли не совпадают!')
         }
     }
@@ -112,8 +114,7 @@
             } else {
 
             }
-        }
-        else {
+        } else {
             AddNotification('Неверный формат почты')
         }
     }
