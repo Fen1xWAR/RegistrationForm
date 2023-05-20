@@ -6,17 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Style.css">
     <title>Form</title>
+
+    <script src="jquery-3.6.4.js"></script>
     <script src="script.js"></script>
-<!--    <script src="jquery-3.6.4.js"></script>-->
+
 </head>
 <body>
-<button class="MainButtonViolet" onclick="ShowModal('formreg')">Жмав для регистрации</button>
-<button class="MainButtonViolet" onclick="ShowModal('formsing')">Жмав для входа</button>
+<button class="MainButtonViolet" onclick="ShowModal('#formreg')">Жмав для регистрации</button>
+<button class="MainButtonViolet" onclick="ShowModal('#formsing')">Жмав для входа</button>
 <div class="ModalContainer" id="formreg">
-    <form action="Index.html" class="form" id="form1">
+    <form action="" class="form" id="form1">
 
         <div class="FormElement">
-            <div class="CloseIcon" onclick="CloseModal('formreg')">❌</div>
+            <div class="CloseIcon" onclick="CloseModal('#formreg')">❌</div>
             <div class="header">Регистрация</div>
             <br>
             <label for="loginReg">Введите логин: </label>
@@ -43,18 +45,17 @@
     </form>
 </div>
 <div class="ModalContainer" id="formsing">
-    <form action="Index.html" class="form" id="forms1">
-
+    <form action="" class="form" id="form2">
         <div class="FormElement">
-            <div class="CloseIcon" onclick="CloseModal('formsing')">❌</div>
+            <div class="CloseIcon" onclick="CloseModal('#formsing')">❌</div>
             <div class="header">Вход</div>
             <br>
-            <label for="login">Ваш логин: </label>
-            <input type="text" class="textField" name="loginSing" placeholder="Логин" value="" id="loginSing"
+            <label for="login">Логин или email: </label>
+            <input type="text" class="textField" name="loginSing" placeholder="" value="" id="loginKey"
                    required><br>
-            <label for="Mail">Ваш Email: </label>
-            <input type="text" class="textField" name="MailSing" placeholder="Email" value="" id="mailSing"
-                   required><br>
+<!--            <label for="Mail">Ваш Email: </label>-->
+<!--            <input type="email" class="textField" name="MailSing" placeholder="Email" value="" id="mailSing"-->
+<!--                   required><br>-->
             <div class="InputContainer" id="Password">
                 <label for="Pass">Ваш пароль: </label>
                 <div class="PasswordInput">
@@ -73,22 +74,17 @@
 </div>
 </body>
 <script>
-    document.getElementById('formreg').onsubmit = function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        let login = document.getElementById("loginReg").value
-        let mail = document.getElementById("mailReg").value
-        let pass = document.getElementById("passReg").value
-        let passToConfirm = document.getElementById("passRegConfirm").value
-        let sex = document.getElementById("Sex0").checked
+    $('#form1').submit(function () {
+        let login = $('#loginReg').val()
+        let mail = $('#mailReg').val()
+        let pass = $('#passReg').val()
+        let passToConfirm = $('#passRegConfirm').val()
+        let sex =   $('#Sex0').get(0).checked ? true: false
         if (pass == passToConfirm) {
-
-
             if (validateEmail(mail)) {
                 if (SaveJSONReg(login, pass, mail, sex)) {
                     AddNotification("Успешная регистрация!");
-                    setTimeout(CloseModal, 1000, 'formreg')
+                    setTimeout(CloseModal, 1000, '#formreg')
                 } else {
                     AddNotification('Такой пользователь уже существует!')
                 }
@@ -99,24 +95,33 @@
         } else {
             AddNotification('Пароли не совпадают!')
         }
-    }
-    document.getElementById('formsing').onsubmit = function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        let login = document.getElementById("loginSing").value
-        let mail = document.getElementById("mailSing").value
-        let pass = document.getElementById("passSing").value
-        if (validateEmail(mail)) {
+        return false
+    })
+    $('#form2').submit(function (E) {
 
-
-            if (JSONRegDataCheckout(login, mail, pass)) {
-                (AddNotification("Успешный вход!"), setInterval(location.href = 'http://www.yandex.ru/', 1000))
-            } else {
-
-            }
-        } else {
-            AddNotification('Неверный формат почты')
+        E.preventDefault()
+        // let login = $('#loginSing').val()
+        // let mail = $('#mailSing').val()
+        let pass = $('#passSing').val()
+        let loginKey = $('#loginKey').val()
+        if (validateEmail(loginKey)){
+            CheckUser(loginKey,pass,'mail')
         }
-    }
+        else(
+            CheckUser(loginKey,pass,'login')
+        )
+        // if (validateEmail(mail)) {
+        //
+        //
+        //     if (JSONRegDataCheckout(login, mail, pass)) {
+        //         (AddNotification("Успешный вход!"), setInterval(location.href = 'http://www.yandex.ru/', 1000))
+        //     } else {
+        //
+        //     }
+        // } else {
+        //     AddNotification('Неверный формат почты')
+        // }
+        return false
+    })
 </script>
 </html>

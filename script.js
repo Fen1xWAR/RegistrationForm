@@ -34,6 +34,23 @@ function $(stringSelector) {
         },
         isHidden: function (){
             return !this.isShown()
+        },
+        click: function click(eventHandler) {
+
+                if (eventHandler) {
+                    this.mainObject.addEventListener('click', function (event) {
+                        const callBackResult = eventHandler(event);
+                        if (!callBackResult) {
+                            event.preventDefault();
+                            event.stopPropagation()
+                        }
+                    });
+                }
+
+                else {
+                    this.mainObject.click()
+
+                }
         }
     }
 }
@@ -60,28 +77,45 @@ function togglePass() {
 
 }
 
-function JSONRegDataCheckout(login, mail, password) {
-    if (localStorage.getItem('users') === undefined) {
-        saveJSON(jsonFileContent)
+// function JSONRegDataCheckout(login, mail, password) {
+//     if (localStorage.getItem('users') === null) {
+//         saveJSON(jsonFileContent)
+//     }
+//     let JsonFile = localStorage.getItem('users')
+//     let JsonData = JSON.parse(JsonFile)
+//     let key = login
+//     if (JsonData.Users[key] === undefined) {
+//         AddNotification('Данного пользователя не существует!')
+//         return false
+//     } else {
+//         RemoveNotification()
+//         let currentUser = JsonData.Users[key]
+//         if (currentUser.login === login && currentUser.password === password && currentUser.mail === mail) {
+//             return true
+//         } else {
+//             AddNotification("Логин или пароль неверны!")
+//             return false
+//         }
+//     }
+// }
+function CheckUser(key,pass,checkType){
+    if (localStorage.getItem('users') === null) {
+         saveJSON(jsonFileContent)
     }
     let JsonFile = localStorage.getItem('users')
     let JsonData = JSON.parse(JsonFile)
-    let key = login
-    if (JsonData.Users[key] === undefined) {
-        AddNotification('Данного пользователя не существует!')
-        return false
-    } else {
-        RemoveNotification()
-        let currentUser = JsonData.Users[key]
-        if (currentUser.login === login && currentUser.password === password && currentUser.mail === mail) {
-            return true
-        } else {
-            AddNotification("Логин или пароль неверны!")
-            return false
+    let users = JsonData.Users
+    if (checkType === 'mail'){
+        for (let User in users){
+            //console.log(user)
+
+            console.log(users.User[mail])
         }
     }
-}
+    else{
 
+    }
+}
 const jsonFileContent = '{"Users":{}}';
 
 function saveJSON(jsonfile) {
@@ -89,7 +123,7 @@ function saveJSON(jsonfile) {
 }
 
 function SaveJSONReg(login, password, mail, sex) {
-    if (localStorage.getItem('users') === undefined) {
+    if (localStorage.getItem('users') === null) {
         saveJSON(jsonFileContent)
     }
     let JsonFile = localStorage.getItem('users')
@@ -119,23 +153,33 @@ function SaveJSONReg(login, password, mail, sex) {
 //     pass.parentNode.appendChild(eye)
 // }
 
-
-function ShowModal(ModalID) {
-    let modal = document.getElementById(ModalID);
-    modal.classList.add("modalShown")
-
+// function ShowModal(ModalID) {
+//     let modal = document.getElementById(ModalID);
+//     modal.classList.add("modalShown")
+//
+// }
+function ShowModal(ModalID){
+    $(ModalID).addClass('modalShown')
 }
 
-function CloseModal(ModalID) {
-    let modal = document.getElementById(ModalID);
-    modal.classList.remove("modalShown");
-    setTimeout(RemoveNotification, 1000)
+// function CloseModal(ModalID) {
+//     let modal = document.getElementById(ModalID);
+//     modal.classList.remove("modalShown");
+//     setTimeout(RemoveNotification, 1000)
+// }
+function CloseModal(ModalID){
+    $(ModalID).removeClass('modalShown')
+    setTimeout(RemoveNotification,1000)
 }
-
-function RemoveNotification() {
-    if ((document.getElementsByClassName('AlertPosition')[0])) {
-        document.getElementsByClassName('AlertPosition')[0].removeChild(document.getElementsByClassName('AlertBox')[0])
-        document.getElementsByTagName("body")[0].removeChild(document.getElementsByClassName('AlertPosition')[0])
+// function RemoveNotification() {
+//     if ((document.getElementsByClassName('AlertPosition')[0])) {
+//         document.getElementsByClassName('AlertPosition')[0].removeChild(document.getElementsByClassName('AlertBox')[0])
+//         document.getElementsByTagName("body")[0].removeChild(document.getElementsByClassName('AlertPosition')[0])
+//     }
+// }
+function RemoveNotification(){
+    if ($('.AlertPosition')){
+        $('.AlertPosition').remove()
     }
 }
 
