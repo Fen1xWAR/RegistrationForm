@@ -1,63 +1,62 @@
-function $(stringSelector) {
-    return {
-        mainObject: document.querySelector(stringSelector),
-        html: function (string) {
-            if (string === undefined) {
-                return this.mainObject.innerHTML;
-            } else {
-                this.mainObject.innerHTML = string;
-                return this;
-            }
-        },
-        hide: function (){
-
-                this.mainObject.style.display = 'none'
-                return this
-        },
-        show: function (){
-            let style = window.getComputedStyle(this.mainObject)
-            let display = style.getPropertyValue('display')
-            if (display === undefined ) {
-                this.mainObject.style.display = ''
-            }
-            else{
-               this.mainObject.style.setProperty('display','block')
-
-            }
-            return this
-        },
-        isShown: function (){
-            return (this.mainObject.style.display !=='none') &&
-                (getComputedStyle(this.mainObject).getPropertyValue('display')!=='none') &&
-                (this.mainObject.style.visibility !=='hidden') &&
-                (getComputedStyle(this.mainObject).getPropertyValue('visibility')!=='hidden')
-        },
-        isHidden: function (){
-            return !this.isShown()
-        },
-        click: function click(eventHandler) {
-
-                if (eventHandler) {
-                    this.mainObject.addEventListener('click', function (event) {
-                        const callBackResult = eventHandler(event);
-                        if (!callBackResult) {
-                            event.preventDefault();
-                            event.stopPropagation()
-                        }
-                    });
-                }
-
-                else {
-                    this.mainObject.click()
-
-                }
-        }
-    }
-}
+// function $(stringSelector) {
+//     return {
+//         mainObject: document.querySelector(stringSelector),
+//         html: function (string) {
+//             if (string === undefined) {
+//                 return this.mainObject.innerHTML;
+//             } else {
+//                 this.mainObject.innerHTML = string;
+//                 return this;
+//             }
+//         },
+//         hide: function (){
+//
+//                 this.mainObject.style.display = 'none'
+//                 return this
+//         },
+//         show: function (){
+//             let style = window.getComputedStyle(this.mainObject)
+//             let display = style.getPropertyValue('display')
+//             if (display === undefined ) {
+//                 this.mainObject.style.display = ''
+//             }
+//             else{
+//                this.mainObject.style.setProperty('display','block')
+//
+//             }
+//             return this
+//         },
+//         isShown: function (){
+//             return (this.mainObject.style.display !=='none') &&
+//                 (getComputedStyle(this.mainObject).getPropertyValue('display')!=='none') &&
+//                 (this.mainObject.style.visibility !=='hidden') &&
+//                 (getComputedStyle(this.mainObject).getPropertyValue('visibility')!=='hidden')
+//         },
+//         isHidden: function (){
+//             return !this.isShown()
+//         },
+//         click: function click(eventHandler) {
+//
+//                 if (eventHandler) {
+//                     this.mainObject.addEventListener('click', function (event) {
+//                         const callBackResult = eventHandler(event);
+//                         if (!callBackResult) {
+//                             event.preventDefault();
+//                             event.stopPropagation()
+//                         }
+//                     });
+//                 }
+//
+//                 else {
+//                     this.mainObject.click()
+//
+//                 }
+//         }
+//     }
+// }
 
 // $('.MainButtonViolet').hide()
-function ShowHidden(elems){
-}
+
 function validateEmail(email) {
     let re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
     return re.test(String(email).toLowerCase());
@@ -179,19 +178,40 @@ function CloseModal(ModalID){
 // }
 function RemoveNotification(){
     if ($('.AlertPosition')){
-        $('.AlertPosition').remove()
+        this.remove()
     }
 }
 
-function AddNotification(NotificationText) {
-    if (!(document.getElementsByClassName("AlertPosition").length === 0)) {
-        RemoveNotification()
+// function AddNotification(NotificationText) {
+//     if (!(document.getElementsByClassName("AlertPosition").length === 0)) {
+//         RemoveNotification()
+//     }
+//     let Notification = document.createElement("div");
+//     let NotificationContainer = document.createElement("div");
+//     NotificationContainer.classList.add("AlertPosition");
+//     Notification.classList.add("AlertBox");
+//     Notification.textContent = NotificationText;
+//     document.getElementsByTagName("body")[0].appendChild(NotificationContainer);
+//     document.getElementsByClassName("AlertPosition")[0].appendChild(Notification);
+// }
+function Notification(Text,Duration=2000,Root ='body'){
+    const Toast = {
+        obj: $('<div class="AlertPosition"></div>'),
+        text : Text,
+        duration: Duration,
+        root: Root,
+        show: function () {
+            $(this.root).append(this.obj)
+            this.obj.append('<div class="AlertBox"></div>')
+            this.obj.children().text(this.text)
+            setTimeout((context)=>{context.hide()},this.duration,this)
+        },
+       hide: function (){
+            this.obj.empty()
+            this.obj.remove()
+
+        }
+
     }
-    let Notification = document.createElement("div");
-    let NotificationContainer = document.createElement("div");
-    NotificationContainer.classList.add("AlertPosition");
-    Notification.classList.add("AlertBox");
-    Notification.textContent = NotificationText;
-    document.getElementsByTagName("body")[0].appendChild(NotificationContainer);
-    document.getElementsByClassName("AlertPosition")[0].appendChild(Notification);
+    return Toast
 }

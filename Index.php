@@ -74,7 +74,8 @@
 </div>
 </body>
 <script>
-    $('#form1').submit(function () {
+    $('#form1').submit(function (E) {
+        E.preventDefault()
         let login = $('#loginReg').val()
         let mail = $('#mailReg').val()
         let pass = $('#passReg').val()
@@ -83,17 +84,18 @@
         if (pass == passToConfirm) {
             if (validateEmail(mail)) {
                 if (SaveJSONReg(login, pass, mail, sex)) {
-                    AddNotification("Успешная регистрация!");
+                    Notification("Успешная регистрация!");
                     setTimeout(CloseModal, 1000, '#formreg')
                 } else {
-                    AddNotification('Такой пользователь уже существует!')
+                    Notification('Такой пользователь уже существует!')
                 }
             } else {
-                AddNotification('Неверный формат почты!')
+                Notification('Неверный формат почты!').show()
             }
 
         } else {
-            AddNotification('Пароли не совпадают!')
+
+            Notification('Пароли не совпадают!').show()
         }
         return false
     })
