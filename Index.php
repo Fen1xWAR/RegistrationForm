@@ -50,8 +50,8 @@
             <div class="CloseIcon" onclick="CloseModal('#formsing')">❌</div>
             <div class="header">Вход</div>
             <br>
-            <label for="login">Логин или email: </label>
-            <input type="text" class="textField" name="loginSing" placeholder="" value="" id="loginKey"
+            <label for="login">Логин: </label>
+            <input type="text" class="textField" name="loginSing" placeholder="Логин" value="" id="loginSing"
                    required><br>
 <!--            <label for="Mail">Ваш Email: </label>-->
 <!--            <input type="email" class="textField" name="MailSing" placeholder="Email" value="" id="mailSing"-->
@@ -80,14 +80,14 @@
         let mail = $('#mailReg').val()
         let pass = $('#passReg').val()
         let passToConfirm = $('#passRegConfirm').val()
-        let sex =   $('#Sex0').get(0).checked ? true: false
-        if (pass == passToConfirm) {
+        let sex =   !!$('#Sex0').get(0).checked
+        if (pass === passToConfirm) {
             if (validateEmail(mail)) {
                 if (SaveJSONReg(login, pass, mail, sex)) {
-                    Notification("Успешная регистрация!");
-                    setTimeout(CloseModal, 1000, '#formreg')
+                    Notification("Успешная регистрация!").show();
+                    setTimeout(CloseModal, 2000, '#formreg')
                 } else {
-                    Notification('Такой пользователь уже существует!')
+                    Notification('Такой пользователь уже существует!').show();
                 }
             } else {
                 Notification('Неверный формат почты!').show()
@@ -102,27 +102,25 @@
     $('#form2').submit(function (E) {
 
         E.preventDefault()
-        // let login = $('#loginSing').val()
+        let login = $('#loginSing').val()
         // let mail = $('#mailSing').val()
         let pass = $('#passSing').val()
-        let loginKey = $('#loginKey').val()
-        if (validateEmail(loginKey)){
-            CheckUser(loginKey,pass,'mail')
-        }
-        else(
-            CheckUser(loginKey,pass,'login')
-        )
-        // if (validateEmail(mail)) {
-        //
-        //
-        //     if (JSONRegDataCheckout(login, mail, pass)) {
-        //         (AddNotification("Успешный вход!"), setInterval(location.href = 'http://www.yandex.ru/', 1000))
-        //     } else {
-        //
-        //     }
-        // } else {
-        //     AddNotification('Неверный формат почты')
+        // let loginKey = $('#loginKey').val()
+        // if (validateEmail(loginKey)){
+        //     CheckUser(loginKey,pass,'mail')
         // }
+        // else(
+        //     CheckUser(loginKey,pass,'login')
+        // )
+            console.log(login,pass)
+
+            if (JSONRegDataCheckout(login, pass)) {
+                Notification("Успешный вход!").show()
+                setTimeout(function(){location.href="Main.php"} , 3000);
+            } else {
+
+            }
+
         return false
     })
 </script>

@@ -76,27 +76,26 @@ function togglePass() {
 
 }
 
-// function JSONRegDataCheckout(login, mail, password) {
-//     if (localStorage.getItem('users') === null) {
-//         saveJSON(jsonFileContent)
-//     }
-//     let JsonFile = localStorage.getItem('users')
-//     let JsonData = JSON.parse(JsonFile)
-//     let key = login
-//     if (JsonData.Users[key] === undefined) {
-//         AddNotification('Данного пользователя не существует!')
-//         return false
-//     } else {
-//         RemoveNotification()
-//         let currentUser = JsonData.Users[key]
-//         if (currentUser.login === login && currentUser.password === password && currentUser.mail === mail) {
-//             return true
-//         } else {
-//             AddNotification("Логин или пароль неверны!")
-//             return false
-//         }
-//     }
-// }
+function JSONRegDataCheckout(login, password) {
+    if (localStorage.getItem('users') === null) {
+        saveJSON(jsonFileContent)
+    }
+    let JsonFile = localStorage.getItem('users')
+    let JsonData = JSON.parse(JsonFile)
+    if (JsonData.Users[login] === undefined) {
+        Notification('Данного пользователя не существует!').show()
+        return false
+    } else {
+        // RemoveNotification()
+        let currentUser = JsonData.Users[login]
+            if (currentUser.login === login && currentUser.password === password ) {
+            return true
+        } else {
+            Notification("Логин или пароль неверны!").show()
+            return false
+        }
+    }
+}
 function CheckUser(key,pass,checkType){
     if (localStorage.getItem('users') === null) {
          saveJSON(jsonFileContent)
@@ -131,7 +130,7 @@ function SaveJSONReg(login, password, mail, sex) {
 
     if (JsonData.Users[key] === undefined) {
         JsonData.Users[key] = {'login': login, 'password': password, 'mail': mail, 'male': sex}
-        RemoveNotification()
+        // RemoveNotification()
         JsonFile = JSON.stringify(JsonData)
         saveJSON(JsonFile)
         return true
@@ -168,7 +167,7 @@ function ShowModal(ModalID){
 // }
 function CloseModal(ModalID){
     $(ModalID).removeClass('modalShown')
-    setTimeout(RemoveNotification,1000)
+    // setTimeout(RemoveNotification,1000)
 }
 // function RemoveNotification() {
 //     if ((document.getElementsByClassName('AlertPosition')[0])) {
@@ -176,11 +175,11 @@ function CloseModal(ModalID){
 //         document.getElementsByTagName("body")[0].removeChild(document.getElementsByClassName('AlertPosition')[0])
 //     }
 // }
-function RemoveNotification(){
-    if ($('.AlertPosition')){
-        this.remove()
-    }
-}
+// function RemoveNotification(){
+//     if ($('.AlertPosition')){
+//         this.remove()
+//     }
+// }
 
 // function AddNotification(NotificationText) {
 //     if (!(document.getElementsByClassName("AlertPosition").length === 0)) {
@@ -195,23 +194,24 @@ function RemoveNotification(){
 //     document.getElementsByClassName("AlertPosition")[0].appendChild(Notification);
 // }
 function Notification(Text,Duration=2000,Root ='body'){
-    const Toast = {
+    return {
         obj: $('<div class="AlertPosition"></div>'),
-        text : Text,
+        text: Text,
         duration: Duration,
         root: Root,
         show: function () {
             $(this.root).append(this.obj)
             this.obj.append('<div class="AlertBox"></div>')
             this.obj.children().text(this.text)
-            setTimeout((context)=>{context.hide()},this.duration,this)
+            setTimeout((context) => {
+                context.hide()
+            }, this.duration, this)
         },
-       hide: function (){
+        hide: function () {
             this.obj.empty()
             this.obj.remove()
 
         }
 
     }
-    return Toast
 }
