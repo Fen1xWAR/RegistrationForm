@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="style.css">
     <title>Form</title>
 
     <script src="jquery-3.6.4.js"></script>
@@ -53,9 +53,9 @@
             <label for="login">Логин: </label>
             <input type="text" class="textField" name="loginSing" placeholder="Логин" value="" id="loginSing"
                    required><br>
-<!--            <label for="Mail">Ваш Email: </label>-->
-<!--            <input type="email" class="textField" name="MailSing" placeholder="Email" value="" id="mailSing"-->
-<!--                   required><br>-->
+            <!--            <label for="Mail">Ваш Email: </label>-->
+            <!--            <input type="email" class="textField" name="MailSing" placeholder="Email" value="" id="mailSing"-->
+            <!--                   required><br>-->
             <div class="InputContainer" id="Password">
                 <label for="Pass">Ваш пароль: </label>
                 <div class="PasswordInput">
@@ -74,37 +74,76 @@
 </div>
 </body>
 <script>
-    $('#form1').submit(function (E) {
+    $("#form1").submit(function (E) {
         E.preventDefault()
+        E.stopPropagation()
         let login = $('#loginReg').val()
         let mail = $('#mailReg').val()
         let pass = $('#passReg').val()
-        let passToConfirm = $('#passRegConfirm').val()
-        let sex =   !!$('#Sex0').get(0).checked
-        if (pass === passToConfirm) {
-            if (validateEmail(mail)) {
-                if (SaveJSONReg(login, pass, mail, sex)) {
-                    Notification("Успешная регистрация!").show();
-                    setTimeout(CloseModal, 2000, '#formreg')
-                } else {
-                    Notification('Такой пользователь уже существует!').show();
-                }
-            } else {
-                Notification('Неверный формат почты!').show()
-            }
-
-        } else {
-
-            Notification('Пароли не совпадают!').show()
+        let sex = !!$('#Sex0').get(0).checked
+        if (!validateEmail(mail)){
+            Notification('Неверный формат почты!').show()
+            return false
         }
+        if (! ($('#passRegConfirm').val() ===pass)){
+            Notification('Пароли не совпадают!').show()
+            return false
+        }
+        let data = {
+            login :  login,
+            mail : mail,
+            pass : pass,
+            sex : sex,
+            }
+        $.ajax({
+            type: 'POST',
+            cache: false,
+            dataType: 'text',
+            url: '/loginSystem.php',
+            data: {"register": data},
+            success: function(data) {
+                Notification(data).show()
+                if (data === "Успешная регистрация"){
+                    setTimeout(CloseModal, 2000, '#formreg')
+                }
+
+
+            }
+        });
         return false
     })
+    // $('#form1').submit(function (E) {
+    //     E.preventDefault()
+    //     let login = $('#loginReg').val()
+    //     let mail = $('#mailReg').val()
+    //     let pass = $('#passReg').val()
+    //     let passToConfirm = $('#passRegConfirm').val()
+    //     let sex =   !!$('#Sex0').get(0).checked
+    //     if (pass === passToConfirm) {
+    //         if (validateEmail(mail)) {
+    //             if (SaveJSONReg(login, pass, mail, sex)) {
+    //                 Notification("Успешная регистрация!").show();
+    //                 setTimeout(CloseModal, 2000, '#formreg')
+    //             } else {
+    //                 Notification('Такой пользователь уже существует!').show();
+    //             }
+    //         } else {
+    //             Notification('Неверный формат почты!').show()
+    //         }
+    //
+    //     } else {
+    //
+    //         Notification('Пароли не совпадают!').show()
+    //     }
+    //     return false
+    // })
     $('#form2').submit(function (E) {
 
         E.preventDefault()
         let login = $('#loginSing').val()
-        // let mail = $('#mailSing').val()
         let pass = $('#passSing').val()
+        // let mail = $('#mailSing').val()
+
         // let loginKey = $('#loginKey').val()
         // if (validateEmail(loginKey)){
         //     CheckUser(loginKey,pass,'mail')
@@ -112,16 +151,55 @@
         // else(
         //     CheckUser(loginKey,pass,'login')
         // )
-            console.log(login,pass)
+        let data = {
+            login :  login,
+            pass : pass,
+        }
+        $.ajax({
+            type: 'POST',
+            cache: false,
+            dataType: 'text',
+            url: '/loginSystem.php',
+            data: {"login": data},
+            success: function(data) {
+                Notification(data).show()
+                if (data === "Успешный вход"){
+                    setTimeout(function () {
+                        CloseModal("#formsing")
+                        location.href = "Main.php"
+                    }, 2000);
+                }
 
-            if (JSONRegDataCheckout(login, pass)) {
-                Notification("Успешный вход!").show()
-                setTimeout(function(){location.href="Main.php"} , 3000);
-            } else {
 
             }
-
+        });
         return false
     })
+    // $('#form2').submit(function (E) {
+    //
+    //     E.preventDefault()
+    //     let login = $('#loginSing').val()
+    //     // let mail = $('#mailSing').val()
+    //     let pass = $('#passSing').val()
+    //     // let loginKey = $('#loginKey').val()
+    //     // if (validateEmail(loginKey)){
+    //     //     CheckUser(loginKey,pass,'mail')
+    //     // }
+    //     // else(
+    //     //     CheckUser(loginKey,pass,'login')
+    //     // )
+    //     console.log(login, pass)
+    //
+    //     if (JSONRegDataCheckout(login, pass)) {
+    //         Notification("Успешный вход!").show()
+    //         setTimeout(function () {
+    //             location.href = "Main.php"
+    //         }, 3000);
+    //     } else {
+    //
+    //     }
+    //
+    //     return false
+    // })
 </script>
 </html>
