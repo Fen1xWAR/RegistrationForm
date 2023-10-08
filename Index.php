@@ -166,7 +166,7 @@
                 if (data === "Успешный вход"){
                     setTimeout(function () {
                         CloseModal("#formsing")
-                        location.href = "Main.php"
+                        location.href = "UserList.php"
                     }, 2000);
                 }
 

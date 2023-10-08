@@ -6,7 +6,13 @@ h1{
     box-sizing: border-box;
     overflow: hidden;
 }
-
+table{
+    color: white;
+    border-collapse: collapse;
+}
+tr,td,th{
+    border: 1px white solid;
+}
 body {
     background-repeat: no-repeat;
     background-position: center center;

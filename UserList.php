@@ -21,20 +21,19 @@ $port = 3306;
 
 $db = new mysqli($host, $user, $password, $db, $port);
 
-// Проверяем соединение
+
 if ($db->connect_errno) {
     echo "Не удалось подключиться к MySQL: (" . $db->connect_errno . ") " . $db->connect_error;
     exit;
 }
 
-// Запрос для получения всех записей из таблицы
+
 $query = "SELECT * FROM users";
 $result = $db->query($query);
 
-// Проверяем, есть ли записи
 if ($result->num_rows > 0) {
     echo "<div style='display: flex; flex-direction: column'>";
-    echo "<h1>Пользователи!</h1>";
+    echo "<h1>Пользователи:</h1>";
     echo "<table>";
     echo "<tr>
         <th>ID</th>
@@ -43,7 +42,7 @@ if ($result->num_rows > 0) {
         <th>Sex</th>
         </tr>";
 
-    // Выводим каждую запись в виде строки таблицы
+
     while ($row = $result->fetch_assoc()) {
         echo "<tr>";
         echo "<td>" . $row['ID'] . "</td>";
@@ -57,7 +56,7 @@ if ($result->num_rows > 0) {
     echo "</table>";
     echo "</div>";
 } else {
-    echo "Записи не найдены";
+    echo "<h1>Записи не найдены!</h1>";
 }
 
 $db->close();
