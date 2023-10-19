@@ -1,4 +1,5 @@
 <?php
+include("connect.php");
 if (isset($_POST['register'])) {
 
     $data = ($_POST['register']);
@@ -10,13 +11,6 @@ if (isset($_POST['register'])) {
         $pass = password_hash($data['pass'],PASSWORD_DEFAULT);
         $sex = boolval($data['sex']);
 
-        $host = 'localhost';
-        $db = 'users';
-        $user = 'root';
-        $password = 'Aa220377!';
-        $port = 3306;
-
-        $db = new mysqli($host, $user, $password, $db, $port);
         if ($db->connect_errno) {
 
             echo "Failed to connect";
@@ -57,11 +51,7 @@ if (isset($_POST['register'])) {
         $login = $data['login'];
         $pass = $data['pass'];
 
-        $host = 'localhost';
-        $db = 'users';
-        $user = 'root';
-        $password = 'Aa220377!';
-        $port = 3306;
+
 
         $db = new mysqli($host, $user, $password, $db, $port);
         if ($db->connect_errno) {
