@@ -14,6 +14,7 @@
 <body>
 <button class="MainButtonViolet" onclick="ShowModal('#formreg')">Жмав для регистрации</button>
 <button class="MainButtonViolet" onclick="ShowModal('#formsing')">Жмав для входа</button>
+<button class="MainButtonViolet" onclick="location.href = 'UserList.php'">Список пользователей</button>
 <div class="ModalContainer" id="formreg">
     <form action="" class="form" id="form1">
 
@@ -80,7 +81,7 @@
         let login = $('#loginReg').val()
         let mail = $('#mailReg').val()
         let pass = $('#passReg').val()
-        let sex = !!$('#Sex0').get(0).checked
+        let sex = $('#Sex0').get(0).checked
         if (!validateEmail(mail)){
             Notification('Неверный формат почты!').show()
             return false
@@ -155,24 +156,24 @@
             login :  login,
             pass : pass,
         }
-        $.ajax({
-            type: 'POST',
-            cache: false,
-            dataType: 'text',
-            url: '/loginSystem.php',
-            data: {"login": data},
-            success: function(data) {
-                Notification(data).show()
-                if (data === "Успешный вход"){
-                    setTimeout(function () {
-                        CloseModal("#formsing")
-                        location.href = "UserList.php"
-                    }, 2000);
+            $.ajax({
+                type: 'POST',
+                cache: false,
+                dataType: 'text',
+                url: '/loginSystem.php',
+                data: {"login": data},
+                success: function(data) {
+                    Notification(data).show()
+                    if (data === "Вход выполнен успешно!"){
+                        setTimeout(function () {
+                            CloseModal("#formsing")
+                            location.href = "UserList.php"
+                        }, 2000);
+                    }
+
+
                 }
-
-
-            }
-        });
+            });
         return false
     })
     // $('#form2').submit(function (E) {
